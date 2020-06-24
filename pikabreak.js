@@ -1,10 +1,12 @@
+const { execSync } = require('child_process')
+
 class PikaBreak {
     // public
     state = 'stop' // stop-fing-work
-    findingDuration = 2000 // [msec]
-    checkDuration = 2000 // [msec]
+    findingDuration = 60 * 1000 // [msec]
+    checkDuration = 5 * 60 * 1000 // [msec]
     lightCycle = 6
-    lightDuration = 2000 // [msec]
+    lightDuration = 10 * 1000 // [msec]
 
     // private
     _peripherals = []
@@ -13,18 +15,21 @@ class PikaBreak {
   
     constructor() {
       // console.log('PikaBreak Class')
+      this._lightOff()
+      console.log('state:', this.state)
     }
   
     detectBeacon(_peripheral){
       if(this.state === 'stop'){
         this.state = 'find'
+        console.log('state:', this.state)
         this._peripherals.push(_peripheral)
         const t = new Date().getTime()
         this._timestamps.push(t)
   
         // timer start
         setTimeout(()=>{
-            console.log(this._timestamps)
+            // console.log(this._timestamps)
             if(this._numberOfPackets() > 1){
                 this.state = 'work'
                 this._timestamps = []
@@ -35,6 +40,7 @@ class PikaBreak {
                 this._timestamps = []
                 this._peripherals = []
                 this.state = 'stop'
+                console.log('state:', this.state)
             }
           }, this.findingDuration)
 
@@ -66,6 +72,7 @@ class PikaBreak {
             }else{
                 this._workCycleCount = 0
                 this.state = 'stop'
+                console.log('state:', this.state)
                 // console.log(this.state)
             }
         }
@@ -85,10 +92,12 @@ class PikaBreak {
 
     _lightOn(){
         console.log('light--ON--')
+        // execSync('sudo sh -c "echo -n \\"1-1\\" > /sys/bus/usb/drivers/usb/bind"')
     }
 
     _lightOff(){
         console.log('light--OFF--')
+        // execSync('sudo sh -c "echo -n \\"1-1\\" > /sys/bus/usb/drivers/usb/unbind"')
     }
   }
 
