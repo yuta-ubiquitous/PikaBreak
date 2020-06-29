@@ -6,6 +6,7 @@ class PikaBreak {
   findingDuration = 60 * 1000 // [msec]
   checkDuration = 5 * 60 * 1000 // [msec]
   lightCycle = 6
+  lightEmphasisCycle = this.lightCycle * 3
   lightDuration = 10 * 1000 // [msec]
 
   // private
@@ -65,7 +66,10 @@ class PikaBreak {
         this._peripherals = []
 
         console.log('workCycle:', this._workCycleCount)
-        if (this._workCycleCount % this.lightCycle === 0) {
+        if(this._workCycleCount % this.lightEmphasisCycle === 0){
+          this._light_emphasis()
+        }
+        else if (this._workCycleCount % this.lightCycle === 0) {
           this._light()
         }
         setTimeout(workCycle, this.checkDuration)
@@ -83,6 +87,52 @@ class PikaBreak {
     return this._peripherals.length
   }
 
+  _lightOnAsync() {
+    return new Promise((resolve, reject)=>{
+      setTimeout(()=>{
+        this._lightOn()
+        resolve('on')
+      }, this.lightDuration)
+    })
+  }
+
+  _lightOffAsync() {
+    return new Promise((resolve, reject)=>{
+      setTimeout(()=>{
+        this._lightOff()
+        resolve('off')
+      }, this.lightDuration)
+    })
+  }
+  
+  _light_emphasis(){
+    Promise.resolve()
+    .then(()=>{
+      return new Promise((resolve, reject)=>{
+        this._lightOn()
+        resolve('init')
+      })
+    })
+    .then(v=>{
+      return this._lightOffAsync()
+    })
+    .then(v=>{
+      return this._lightOnAsync()
+    })
+    .then(v=>{
+      return this._lightOffAsync()
+    })
+    .then(v=>{
+      return this._lightOnAsync()
+    })
+    .then(v=>{
+      return this._lightOffAsync()
+    })
+    .catch(err=>{
+      console.error(err)
+    })
+  }
+
   _light() {
     this._lightOn()
     setTimeout(() => {
@@ -91,21 +141,21 @@ class PikaBreak {
   }
 
   _lightOn() {
-    /* try{
+    try{
       execSync('sudo sh -c "echo -n \\"1-1\\" > /sys/bus/usb/drivers/usb/bind"')
       console.log('light--ON--')
     }catch(err){
-      console.error('could not light on')
-    } */
+      console.error('can not light on')
+    }
   }
 
   _lightOff() {
-    /* try{
+    try{
       execSync('sudo sh -c "echo -n \\"1-1\\" > /sys/bus/usb/drivers/usb/unbind"')
       console.log('light--OFF--')
     }catch(err){
-      console.error('could not light off')
-    }*/
+      console.error('can not light off')
+    }
   }
 }
 
