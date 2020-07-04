@@ -1,17 +1,36 @@
 # PikaBreak
+
 ## 動作環境
--   Raspberry Pi 3 Model B
--   Node.js v14.4.0
+
+- Raspberry Pi 3以降（2以下はBLE対応ドングルが必要）
+
+- Node.js v14.4.0
+
+- USB式のLEDライト
+
+- iBeacon
 
 ## 準備
+
 - packageのインストール
+
 ```sh
 npm install
 ```
+
 ### 設定ファイル
+
+- ディレクトリにconfig.jsonを作成
+
+'''
+$ cd PikaBreak
+$ touch config.json
+'''
+
 - iBeaconのUUID，Major，Minorを記入
 
 config.json
+
 ```json
 {
     "beacon":{
@@ -23,26 +42,37 @@ config.json
 ```
 
 ###  時間
+
 pikabreak.js
+
 ``` javascript
   findingDuration = 60 * 1000 // [msec]
   checkDuration = 5 * 60 * 1000 // [msec]
   lightCycle = 6
   lightDuration = 10 * 1000 // [msec]
 ```
-findingDuration：ビーコンの検索確定時間  
-checkDuration：ビーコンの生存確認時間  
-lightCycle：ライトを光らせるまでのcheckDurationの回数  
-lightDuration：ライトを光らせる時間  
 
-## 実行
+findingDuration：ビーコンの検知時間（１分） 
+
+checkDuration：ビーコンの生存確認時間（5分）
+
+lightCycle：ライトを光らせるまでのcheckDurationの回数 （6回：5*6=30分周期） 
+
+lightDuration：ライトを光らせる時間（10秒）
+
+### 実行
 ``` sh
-sudo npm start
+npm start
 ```
 or
 ``` sh
-sudo node index.js
+node index.js
 ```
+
+## その他
+
+### [PM2](https://pm2.keymetrics.io/)
+- Raspberry Piが起動すると自動実行してくれる
 
 ## ライセンス
 ```
