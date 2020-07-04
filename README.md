@@ -22,12 +22,12 @@ npm install
 
 - ディレクトリにconfig.jsonを作成
 
-'''
+```
 $ cd PikaBreak
 $ touch config.json
-'''
+```
 
-- iBeaconのUUID，Major，Minorを記入
+- iBeaconのUUID， Major， Minorを記入
 
 config.json
 
@@ -52,13 +52,13 @@ pikabreak.js
   lightDuration = 10 * 1000 // [msec]
 ```
 
-findingDuration：ビーコンの検知時間（１分） 
+findingDuration： ビーコンの検知時間（１分） 
 
-checkDuration：ビーコンの生存確認時間（5分）
+checkDuration： ビーコンの生存確認時間（5分）
 
-lightCycle：ライトを光らせるまでのcheckDurationの回数 （6回：5*6=30分周期） 
+lightCycle： ライトを光らせるまでのcheckDurationの回数 （6回：5*6=30分周期） 
 
-lightDuration：ライトを光らせる時間（10秒）
+lightDuration： ライトを光らせる時間（10秒）
 
 ### 実行
 ``` sh
